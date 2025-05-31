@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "https://your-production-url/api", // Replace with your production backend URL
+  apiUrl: "https://mean-stack-1z3b.onrender.com", // Replace with your production backend URL
 };
