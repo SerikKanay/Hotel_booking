@@ -15,15 +15,13 @@ router.get("/", authMiddleware, async (req: Request, res: Response, next: NextFu
 
 router.get("/search", authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1, limit = 10, query } = req.body;
+    const { page = 1, limit = 10, query = "" } = req.query;
     const parsedPage = parseInt(page as string);
     const parsedLimit = parseInt(limit as string);
 
-    if (!query || typeof query !== "string") {
-      return next(new Error("Invalid query parameter"));
-    }
-
-    const hotels = await Hotel.find({ name: new RegExp(query as string, "i") })
+    const searchQuery = query ? { name: new RegExp(query as string, "i") } : {};
+    
+    const hotels = await Hotel.find(searchQuery)
       .limit(parsedLimit)
       .skip((parsedPage - 1) * parsedLimit);
 
@@ -35,6 +33,7 @@ router.get("/search", authMiddleware, async (req: Request, res: Response, next: 
 
 router.get("/:id", authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("Fetching hotel with ID:", req.params.id);
     const hotel = await Hotel.findById(req.params.id);
     if (!hotel) {
       return next(new Error("Hotel not found"));

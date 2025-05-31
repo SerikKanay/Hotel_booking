@@ -1,40 +1,6 @@
 <div class="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
-  <div class="p-4" *ngIf="!hotelBooking">
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4">View Hotel: {{ hotel?.name }}</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <strong>Name:</strong> {{ hotel?.name }}
-        </div>
-        <div>
-          <strong>Address:</strong> {{ hotel?.address }}
-        </div>
-        <div>
-          <strong>City:</strong> {{ hotel?.city }}
-        </div>
-        <div>
-          <strong>State:</strong> {{ hotel?.state }}
-        </div>
-        <div>
-          <strong>Zip:</strong> {{ hotel?.zip }}
-        </div>
-        <div>
-          <strong>Nightly Rate:</strong> {{ hotel?.rate | currency }}
-        </div>
-      </div>
-      <div class="mt-6 text-center">
-        <button class="btn btn-primary mr-2" (click)="hotelBooking = true">
-          Book Now
-        </button>
-        <button class="btn btn-secondary" (click)="backToSearch()">
-          Back To Search
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Booking Form -->
-  <div class="p-4" *ngIf="hotelBooking && !confirmBooking">
+  <div class="p-4" *ngIf="!confirmBooking">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-semibold mb-4">Book Hotel: {{ hotel?.name }}</h2>
       <form [formGroup]="paymentForm" (ngSubmit)="proceed()" novalidate>
@@ -78,14 +44,13 @@
               *ngIf="paymentForm.get('checkOutDate')?.invalid && (paymentForm.get('checkOutDate')?.touched || paymentForm.get('checkOutDate')?.dirty)"
               class="mt-2">
               <small *ngIf="paymentForm.get('checkOutDate')?.errors?.['required']"
-                class="text-red-500 font-semibold">Check-out date
-                is required.</small>
+                class="text-red-500 font-semibold">Check-out date is required.</small>
             </div>
           </div>
           <!-- Room Type -->
           <div class="mb-4">
             <label for="roomType" class="block text-sm font-bold mb-2">Room Preference</label>
-            <select formControlName="roomType" class="form-select" required>
+            <select formControlName="roomType" class="border border-gray-300 p-2 w-full rounded" required>
               <option value="">- - Make Selection - -</option>
               <option *ngFor="let option of options" [ngValue]="option">
                 {{ option.name }} - {{ option.type }}
@@ -100,7 +65,7 @@
           </div>
           <!-- Credit Card Info -->
           <div class="mb-4">
-            <label for="creditCardName" class="block text-sm font-bold mb-2">Credit Card #</label>
+            <label for="creditCardName" class="block text-sm font-bold mb-2">Credit Card Name</label>
             <input type="text" formControlName="creditCardName" class="border border-gray-300 p-2 w-full rounded"
               required />
             <div
@@ -133,31 +98,29 @@
                 class="text-red-500 font-semibold">CVV must be 3-4 digits.</small>
             </div>
           </div>
-          <!-- Expiry Date -->
+          <!-- Expiry Month -->
           <div class="mb-4">
-            <label for="expiryMonth" class="block text-sm font-bold mb-2">Expiry Date</label>
-            <select formControlName="expiryMonth" class="form-select" required>
-              <option value="">Month</option>
-              <option *ngFor="let month of months" [ngValue]="month">
-                {{ month }}
-              </option>
-            </select>
-            <select formControlName="expiryYear" class="form-select" required>
-              <option value="">Year</option>
-              <option *ngFor="let year of years" [ngValue]="year">
-                {{ year }}
-              </option>
+            <label for="month" class="block text-sm font-bold mb-2">Expiry Month</label>
+            <select formControlName="month" class="border border-gray-300 p-2 w-full rounded" required>
+              <option *ngFor="let month of months; let i = index" [value]="i + 1">{{ month }}</option>
             </select>
             <div
-              *ngIf="paymentForm.get('expiryMonth')?.invalid && (paymentForm.get('expiryMonth')?.touched || paymentForm.get('expiryMonth')?.dirty)"
+              *ngIf="paymentForm.get('month')?.invalid && (paymentForm.get('month')?.touched || paymentForm.get('month')?.dirty)"
               class="mt-2">
-              <small *ngIf="paymentForm.get('expiryMonth')?.errors?.['required']"
+              <small *ngIf="paymentForm.get('month')?.errors?.['required']"
                 class="text-red-500 font-semibold">Expiration Month is required.</small>
             </div>
+          </div>
+          <!-- Expiry Year -->
+          <div class="mb-4">
+            <label for="year" class="block text-sm font-bold mb-2">Expiry Year</label>
+            <select formControlName="year" class="border border-gray-300 p-2 w-full rounded" required>
+              <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+            </select>
             <div
-              *ngIf="paymentForm.get('expiryYear')?.invalid && (paymentForm.get('expiryYear')?.touched || paymentForm.get('expiryYear')?.dirty)"
+              *ngIf="paymentForm.get('year')?.invalid && (paymentForm.get('year')?.touched || paymentForm.get('year')?.dirty)"
               class="mt-2">
-              <small *ngIf="paymentForm.get('expiryYear')?.errors?.['required']"
+              <small *ngIf="paymentForm.get('year')?.errors?.['required']"
                 class="text-red-500 font-semibold">Expiration Year is required.</small>
             </div>
           </div>

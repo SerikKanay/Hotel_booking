@@ -3,7 +3,7 @@ import { RateLimiterMemory, RateLimiterRes } from "rate-limiter-flexible";
 
 // Rate limiter for login attempts
 const loginLimiter = new RateLimiterMemory({
-  points: 5, // 5 requests
+  points: 10, // 10 requests
   duration: 15 * 60, // per 15 minutes
 });
 

@@ -14,7 +14,6 @@ import { BookingService } from "../../services/booking.service";
 })
 export class BookingComponent implements OnInit {
   hotel: any;
-  hotelBooking = false;
   confirmBooking = false;
   paymentForm!: FormGroup;
   hotelId: string | null = null;
@@ -41,7 +40,7 @@ export class BookingComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.hotelId = this.route.snapshot.paramMap.get("hotelId");
+    this.hotelId = this.route.snapshot.paramMap.get("id");
     if (this.hotelId) {
       this.loadHotelDetails(this.hotelId);
     }
@@ -53,8 +52,8 @@ export class BookingComponent implements OnInit {
       checkInDate: ["", Validators.required],
       checkOutDate: ["", Validators.required],
       creditCardName: ["", Validators.required],
-      expiryYear: [this.currentYear, Validators.required],
-      expiryMonth: [this.currentMonth, Validators.required],
+      year: [this.currentYear, Validators.required],
+      month: [this.currentMonth, Validators.required],
       securityCode: ["", [Validators.required, Validators.pattern(/^\d{3}$/)]],
       creditCard: ["", [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.minLength(15), Validators.maxLength(19)]],
     });
@@ -67,14 +66,20 @@ export class BookingComponent implements OnInit {
   }
 
   bookHotel(): void {
-    if (this.paymentForm.valid) {
+    if (this.paymentForm.valid && this.hotel?._id) {
+      const formValue = this.paymentForm.value;
       const bookingData = {
-        ...this.paymentForm.value,
-        hotel: this.hotel,
+        ...formValue,
+        roomType: formValue.roomType.name,
+        hotel: this.hotel._id,
       };
-      this.bookingService.createBooking(bookingData).subscribe(() => {
-        this.confirmBooking = true;
-        this.booking = bookingData;
+      this.bookingService.createBooking(bookingData).subscribe({
+        next: () => {
+          this.router.navigate(['/profile']);
+        },
+        error: (error) => {
+          console.error('Booking failed:', error);
+        }
       });
     }
   }

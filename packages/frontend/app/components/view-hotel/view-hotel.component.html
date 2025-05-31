@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-semibold mb-4">View Hotel: {{ hotel?.name }}</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <strong>Name:</strong> {{ hotel?.name }}
+      </div>
+      <div>
+        <strong>Address:</strong> {{ hotel?.address }}
+      </div>
+      <div>
+        <strong>City:</strong> {{ hotel?.city }}
+      </div>
+      <div>
+        <strong>State:</strong> {{ hotel?.state }}
+      </div>
+      <div>
+        <strong>Zip:</strong> {{ hotel?.zip }}
+      </div>
+      <div>
+        <strong>Nightly Rate:</strong> {{ hotel?.rate | currency }}
+      </div>
+    </div>
+    <div class="mt-6 text-center">
+      <button class="btn btn-primary mr-2" (click)="bookHotel()">
+        Book Now
+      </button>
+      <button class="btn btn-secondary" (click)="backToSearch()">
+        Back To Search
+      </button>
+    </div>
+  </div>
+</div> 

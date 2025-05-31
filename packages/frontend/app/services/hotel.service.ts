@@ -39,8 +39,11 @@ export class HotelService {
     return this.http.get(`${this.apiUrl}/${hotelId}`);
   }
 
-  searchHotels(query: string, page: number, limit: number): Observable<Hotel[]> {
-    const params = new HttpParams().set("query", query).set("page", page.toString()).set("limit", limit.toString());
+  searchHotels(query: string, page: number = 1, limit: number = 10): Observable<Hotel[]> {
+    const params = new HttpParams()
+      .set("query", query || "")
+      .set("page", page.toString())
+      .set("limit", limit.toString());
 
     return this.http.get<Hotel[]>(`${this.apiUrl}/search`, { params });
   }

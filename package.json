@@ -4,7 +4,7 @@
   "description": "Using MEAN stack to implement a simple hotel booking application where user can search hotels in database and book them.",
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "cd packages/backend && node src/app.js",
+    "start:backend": "cd packages/backend && ts-node app.ts",
     "start:frontend": "cd packages/frontend && live-server"
   },
   "keywords": [
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/satishjhanwer/hotel-booking-mean-stack",
   "devDependencies": {
-    "concurrently": "^9.0.1"
+    "concurrently": "^9.1.2"
   },
   "resolutions": {
     "http-proxy-middleware": "^3.0.3"

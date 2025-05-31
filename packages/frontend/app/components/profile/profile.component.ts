@@ -1,9 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HotelService } from "../../services/hotel.service";
 import { BookingService } from "../../services/booking.service";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
+import { AuthService } from "../../services/auth.service";
+import { catchError, of } from "rxjs";
+
+interface User {
+  id: string;
+  email: string;
+  isAdmin: boolean;
+  firstName: string;
+}
 
 @Component({
   standalone: true,
@@ -16,10 +25,29 @@ export class ProfileComponent implements OnInit {
   term = new FormControl("");
   hotels: any[] = [];
   bookings: any[] = [];
+  user: User | null = null;
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   constructor(private hotelService: HotelService, private bookingService: BookingService) {}
 
   ngOnInit(): void {
+    const user = this.authService.getUserFromStorage();
+    if (!user) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (user.isAdmin) {
+      this.router.navigate(['/admin/profile']);
+      return;
+    }
+
+    this.user = user;
+    this.loadData();
+  }
+
+  private loadData(): void {
     this.getHotels();
     this.getBookings();
   }
